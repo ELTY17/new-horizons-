@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Horizons MC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #9b59b6;
+      --purple-dark: #6c3483;
+      --purple-light: #d7bde2;
+      --green: #2ecc71;
+      --green-dark: #1a8a47;
+      --yellow: #f1c40f;
+      --red: #e74c3c;
+      --bg: #0a0a0f;
+      --bg2: #0f0f1a;
+      --bg3: #141428;
+      --text: #e8e8f0;
+      --text-dim: #8888aa;
+      --border: rgba(155, 89, 182, 0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* PARTICLES */
+    #particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--purple-light);
+      border-radius: 50%;
+      animation: float linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--purple);
+    }
+
+    .nav-logo span {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1rem;
+      color: var(--purple-light);
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--purple-light); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 20px 60px;
+      z-index: 1;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(155, 89, 182, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(46, 204, 113, 0.08) 0%, transparent 50%);
+    }
+
+    .hero-logo {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 3px solid var(--purple);
+      box-shadow: 0 0 40px rgba(155, 89, 182, 0.5), 0 0 80px rgba(155, 89, 182, 0.2);
+      margin-bottom: 32px;
+      animation: pulse-logo 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-logo {
+      0%, 100% { box-shadow: 0 0 40px rgba(155, 89, 182, 0.5), 0 0 80px rgba(155, 89, 182, 0.2); }
+      50% { box-shadow: 0 0 60px rgba(155, 89, 182, 0.8), 0 0 120px rgba(155, 89, 182, 0.4); }
+    }
+
+    .hero h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, var(--purple-light) 50%, var(--purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      letter-spacing: 4px;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .hero-ip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(155, 89, 182, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 24px;
+      margin-bottom: 40px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .hero-ip:hover {
+      background: rgba(155, 89, 182, 0.2);
+      border-color: var(--purple);
+      transform: translateY(-2px);
+    }
+
+    .hero-ip .ip-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.1rem;
+      color: var(--purple-light);
+      letter-spacing: 2px;
+    }
+
+    .hero-ip .copy-hint {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .copy-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--green-dark);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 999;
+    }
+
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .badge {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .badge-purple { background: rgba(155, 89, 182, 0.2); border: 1px solid var(--purple); color: var(--purple-light); }
+    .badge-green { background: rgba(46, 204, 113, 0.15); border: 1px solid var(--green-dark); color: var(--green); }
+
+    /* STATUS BAR */
+    .status-bar {
+      position: relative;
+      z-index: 1;
+      margin: 0 40px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 24px;
+      text-align: center;
+    }
+
+    .stat-item { }
+    .stat-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--purple-light);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    .dot-online { background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .dot-offline { background: var(--red); }
+    .dot-checking { background: var(--yellow); }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* SECTIONS */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 80px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.8rem;
+      color: var(--purple-light);
+      margin-bottom: 8px;
+      letter-spacing: 3px;
+    }
+
+    .section-line {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple), transparent);
+      margin-bottom: 40px;
+    }
+
+    /* MODS GRID */
+    .mods-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .mod-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .mod-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(155, 89, 182, 0.15);
+    }
+
+    .mod-icon {
+      font-size: 2rem;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .mod-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--purple-light);
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+
+    .mod-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .mod-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    .tag-mundo { background: rgba(46, 204, 113, 0.15); color: var(--green); }
+    .tag-gameplay { background: rgba(155, 89, 182, 0.2); color: var(--purple-light); }
+    .tag-visual { background: rgba(52, 152, 219, 0.15); color: #7fb3d3; }
+    .tag-rendimiento { background: rgba(241, 196, 15, 0.15); color: var(--yellow); }
+    .tag-estructura { background: rgba(231, 76, 60, 0.15); color: #f1948a; }
+
+    /* NOVEDADES */
+    .news-list { display: flex; flex-direction: column; gap: 20px; }
+
+    .news-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--purple);
+      border-radius: 0 10px 10px 0;
+      padding: 24px 28px;
+      transition: all 0.3s;
+    }
+
+    .news-card:hover { border-left-color: var(--green); }
+
+    .news-date {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .news-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--purple-light);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .news-body {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ADMIN PANEL */
+    .admin-gate {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .admin-gate h3 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.2rem;
+      color: var(--purple-light);
+      margin-bottom: 24px;
+    }
+
+    .admin-input {
+      width: 100%;
+      background: rgba(155, 89, 182, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1rem;
+      letter-spacing: 4px;
+      text-align: center;
+      margin-bottom: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .admin-input:focus { border-color: var(--purple); }
+
+    .btn {
+      padding: 12px 32px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+      color: white;
+    }
+
+    .btn-purple:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(155, 89, 182, 0.4); }
+
+    .btn-green {
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      color: white;
+    }
+
+    .btn-green:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4); }
+
+    .btn-red {
+      background: linear-gradient(135deg, #922b21, var(--red));
+      color: white;
+    }
+
+    .btn-red:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); }
+
+    .btn-yellow {
+      background: linear-gradient(135deg, #9a7d0a, var(--yellow));
+      color: #1a1a1a;
+    }
+
+    .btn-yellow:hover { transform: translateY(-2px); }
+
+    .admin-panel {
+      display: none;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+    }
+
+    .admin-panel.visible { display: block; }
+
+    .admin-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .admin-btn-wrap { display: flex; flex-direction: column; gap: 8px; }
+    .admin-btn-wrap span { font-size: 0.8rem; color: var(--text-dim); letter-spacing: 1px; text-align: center; }
+
+    .admin-log {
+      margin-top: 24px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--green);
+      height: 120px;
+      overflow-y: auto;
+      line-height: 1.8;
+    }
+
+    /* TIENDA */
+    .store-coming {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--bg3);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    .store-coming .big-icon { font-size: 4rem; margin-bottom: 20px; }
+
+    .store-coming h3 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.5rem;
+      color: var(--purple-light);
+      margin-bottom: 12px;
+    }
+
+    .store-coming p { color: var(--text-dim); font-size: 1rem; line-height: 1.6; }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 40px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+    }
+
+    footer a { color: var(--purple-light); text-decoration: none; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--purple-dark); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav>
+  <div class="nav-logo">
+    <img src="https://media.discordapp.net/attachments/1502119539964383254/1502119827781980211/249ecd4e-4c6f-4c2e-a66f-cb5566c8e0c5.png?ex=69fe8d9a&is=69fd3c1a&hm=6a5ad3d5eed2e636ba1f7f8612c08d9b0c3aaea4d3d3209086d2fdf1bd281b12&=&format=webp&quality=lossless" alt="Logo">
+    <span>New Horizons</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#mods">Mods</a></li>
+    <li><a href="#novedades">Novedades</a></li>
+    <li><a href="#tienda">Tienda</a></li>
+    <li><a href="#admin">Admin</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <img class="hero-logo" src="https://media.discordapp.net/attachments/1502119539964383254/1502119827781980211/249ecd4e-4c6f-4c2e-a66f-cb5566c8e0c5.png?ex=69fe8d9a&is=69fd3c1a&hm=6a5ad3d5eed2e636ba1f7f8612c08d9b0c3aaea4d3d3209086d2fdf1bd281b12&=&format=webp&quality=lossless" alt="New Horizons">
+  <h1>New Horizons</h1>
+  <p class="hero-sub">Fabric 1.21.1 · Survival · España</p>
+  <div class="hero-ip" onclick="copyIP()">
+    <span class="ip-text">wrath-vietnamese.gl.joinmc.link</span>
+    <span class="copy-hint">· Click para copiar</span>
+  </div>
+  <div class="hero-badges">
+    <span class="badge badge-purple">Fabric 1.21.1</span>
+    <span class="badge badge-green">Online</span>
+    <span class="badge badge-purple">+90 Mods</span>
+    <span class="badge badge-purple">No Premium OK</span>
+  </div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar" style="position:relative;z-index:1;margin:0 40px 60px;">
+  <div class="stat-item">
+    <span class="stat-value" id="server-status-val">
+      <span class="status-dot dot-checking"></span>Comprobando...
+    </span>
+    <span class="stat-label">Estado</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">1.21.1</span>
+    <span class="stat-label">Versión</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">90+</span>
+    <span class="stat-label">Mods</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">30</span>
+    <span class="stat-label">Max Jugadores</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">España 🇪🇸</span>
+    <span class="stat-label">Región</span>
+  </div>
+</div>
+
+<!-- MODS -->
+<section id="mods">
+  <h2 class="section-title">Modpack</h2>
+  <div class="section-line"></div>
+  <div class="mods-grid">
+    <div class="mod-card">
+      <div class="mod-icon">🌍</div>
+      <div>
+        <div class="mod-name">Biomes O' Plenty</div>
+        <div class="mod-desc">Más de 80 biomas nuevos con paisajes únicos y épicos.</div>
+        <span class="mod-tag tag-mundo">Mundo</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">🏔️</div>
+      <div>
+        <div class="mod-name">Terralith</div>
+        <div class="mod-desc">Generación de terreno completamente renovada con montañas espectaculares.</div>
+        <span class="mod-tag tag-mundo">Mundo</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">🏰</div>
+      <div>
+        <div class="mod-name">Dungeons & Taverns</div>
+        <div class="mod-desc">Mazmorras, tabernas y estructuras únicas por todo el mundo.</div>
+        <span class="mod-tag tag-estructura">Estructura</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">⚔️</div>
+      <div>
+        <div class="mod-name">Takes a Pillage</div>
+        <div class="mod-desc">Nuevas estructuras de pillagers y mayor dificultad de raids.</div>
+        <span class="mod-tag tag-estructura">Estructura</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">💎</div>
+      <div>
+        <div class="mod-name">Advanced Netherite</div>
+        <div class="mod-desc">Nuevo tier de equipamiento más allá del netherite.</div>
+        <span class="mod-tag tag-gameplay">Gameplay</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">🏠</div>
+      <div>
+        <div class="mod-name">Paladin's Furniture</div>
+        <div class="mod-desc">Cientos de muebles para decorar tus construcciones.</div>
+        <span class="mod-tag tag-gameplay">Gameplay</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">🎒</div>
+      <div>
+        <div class="mod-name">Accessories</div>
+        <div class="mod-desc">Sistema de accesorios y equipamiento extra para tu personaje.</div>
+        <span class="mod-tag tag-gameplay">Gameplay</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">🗺️</div>
+      <div>
+        <div class="mod-name">Waystones</div>
+        <div class="mod-desc">Teletransporte rápido entre puntos del mundo.</div>
+        <span class="mod-tag tag-gameplay">Gameplay</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">🎭</div>
+      <div>
+        <div class="mod-name">Friends & Foes</div>
+        <div class="mod-desc">Nuevos mobs inspirados en votaciones de Minecraft.</div>
+        <span class="mod-tag tag-gameplay">Gameplay</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">⚡</div>
+      <div>
+        <div class="mod-name">Sodium + Iris</div>
+        <div class="mod-desc">Rendimiento máximo y soporte para shaders espectaculares.</div>
+        <span class="mod-tag tag-rendimiento">Rendimiento</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">🎵</div>
+      <div>
+        <div class="mod-name">Simple Voice Chat</div>
+        <div class="mod-desc">Voz por proximidad en el servidor. Habla con tus vecinos.</div>
+        <span class="mod-tag tag-gameplay">Gameplay</span>
+      </div>
+    </div>
+    <div class="mod-card">
+      <div class="mod-icon">🌿</div>
+      <div>
+        <div class="mod-name">Vein Miner</div>
+        <div class="mod-desc">Mina venas enteras de minerales de un solo golpe.</div>
+        <span class="mod-tag tag-gameplay">Gameplay</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOVEDADES -->
+<section id="novedades" style="background: var(--bg2); max-width:100%; padding: 80px 40px;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <h2 class="section-title">Novedades</h2>
+    <div class="section-line"></div>
+    <div class="news-list">
+      <div class="news-card">
+        <div class="news-date">08 · 05 · 2026</div>
+        <div class="news-title">🚀 Servidor Lanzado</div>
+        <div class="news-body">New Horizons abre sus puertas. Más de 90 mods cuidadosamente seleccionados, mundo pregenerado y servidor hosteado desde España para máxima latencia. ¡Bienvenidos a bordo!</div>
+      </div>
+      <div class="news-card">
+        <div class="news-date">08 · 05 · 2026</div>
+        <div class="news-title">🤖 Bot de Discord Activo</div>
+        <div class="news-body">Nuestro bot de Discord está operativo. Usa /status, /ip, /start y /restart directamente desde el servidor de Discord para controlar el servidor sin salir de Discord.</div>
+      </div>
+      <div class="news-card">
+        <div class="news-date">Próximamente</div>
+        <div class="news-title">🛒 Tienda de Rangos</div>
+        <div class="news-body">Estamos preparando una tienda con rangos y cosméticos especiales. Mantente atento a las novedades.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIENDA -->
+<section id="tienda">
+  <h2 class="section-title">Tienda</h2>
+  <div class="section-line"></div>
+  <div class="store-coming">
+    <div class="big-icon">🛒</div>
+    <h3>Próximamente</h3>
+    <p>Estamos preparando rangos, cosméticos y beneficios especiales.<br>Sigue las novedades en nuestro Discord.</p>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" style="background: var(--bg2); max-width:100%; padding: 80px 40px;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <h2 class="section-title">Panel Admin</h2>
+    <div class="section-line"></div>
+
+    <div class="admin-gate" id="admin-gate">
+      <h3>🔐 Acceso Restringido</h3>
+      <input type="password" class="admin-input" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPass()">
+      <br>
+      <button class="btn btn-purple" onclick="checkPass()">Entrar</button>
+      <p id="pass-error" style="color:var(--red);margin-top:12px;font-size:0.85rem;display:none;">Contraseña incorrecta</p>
+    </div>
+
+    <div class="admin-panel" id="admin-panel">
+      <h3 style="font-family:'Cinzel Decorative',serif;color:var(--purple-light);margin-bottom:8px;">Panel de Control</h3>
+      <p style="color:var(--text-dim);font-size:0.9rem;margin-bottom:24px;">Nota: Los botones requieren que el bot de Discord esté activo en tu PC.</p>
+      <div class="admin-controls">
+        <div class="admin-btn-wrap">
+          <button class="btn btn-green" onclick="adminAction('start')">▶ Encender</button>
+          <span>Arranca el servidor</span>
+        </div>
+        <div class="admin-btn-wrap">
+          <button class="btn btn-red" onclick="adminAction('stop')">■ Apagar</button>
+          <span>Para el servidor</span>
+        </div>
+        <div class="admin-btn-wrap">
+          <button class="btn btn-yellow" onclick="adminAction('restart')">↺ Reiniciar</button>
+          <span>Reinicia el servidor</span>
+        </div>
+        <div class="admin-btn-wrap">
+          <button class="btn btn-purple" onclick="adminAction('status')">◉ Status</button>
+          <span>Ver estado actual</span>
+        </div>
+      </div>
+      <div class="admin-log" id="admin-log">
+        > Panel de administración listo...<br>
+        > Usa los botones para controlar el servidor.<br>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>New Horizons MC &nbsp;·&nbsp; Fabric 1.21.1 &nbsp;·&nbsp; España 🇪🇸 &nbsp;·&nbsp; <a href="https://discord.gg/" target="_blank">Discord</a></p>
+  <p style="margin-top:8px;font-size:0.75rem;">Hecho con ❤️ · 2026</p>
+</footer>
+
+<div class="copy-toast" id="copy-toast">✓ IP copiada al portapapeles</div>
+
+<script>
+  // PARTICLES
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function createParticle() {
+    return {
+      x: Math.random() * canvas.width,
+      y: canvas.height + 10,
+      size: Math.random() * 2 + 1,
+      speed: Math.random() * 1 + 0.5,
+      opacity: 0,
+      maxOpacity: Math.random() * 0.5 + 0.1,
+      color: Math.random() > 0.5 ? '#d7bde2' : '#9b59b6',
+      drift: (Math.random() - 0.5) * 0.5
+    };
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (particles.length < 60) particles.push(createParticle());
+    particles = particles.filter(p => p.y > -20);
+    particles.forEach(p => {
+      p.y -= p.speed;
+      p.x += p.drift;
+      if (p.y > canvas.height * 0.8) p.opacity = Math.min(p.opacity + 0.02, p.maxOpacity);
+      else if (p.y < canvas.height * 0.2) p.opacity = Math.max(p.opacity - 0.02, 0);
+      ctx.globalAlpha = p.opacity;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  // COPY IP
+  function copyIP() {
+    navigator.clipboard.writeText('wrath-vietnamese.gl.joinmc.link');
+    const toast = document.getElementById('copy-toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // ADMIN
+  const ADMIN_PASS = 'newhorizons2026';
+
+  function checkPass() {
+    const pass = document.getElementById('admin-pass').value;
+    if (pass === ADMIN_PASS) {
+      document.getElementById('admin-gate').style.display = 'none';
+      document.getElementById('admin-panel').classList.add('visible');
+    } else {
+      document.getElementById('pass-error').style.display = 'block';
+      document.getElementById('admin-pass').style.borderColor = 'var(--red)';
+    }
+  }
+
+  function adminAction(action) {
+    const log = document.getElementById('admin-log');
+    const msgs = {
+      start: '> Enviando comando: START...\n> Espera ~2 minutos para que carguen los mods.',
+      stop: '> Enviando comando: STOP...\n> El servidor se apagará en unos segundos.',
+      restart: '> Enviando comando: RESTART...\n> El servidor se reiniciará en ~2 minutos.',
+      status: '> Comprobando estado del servidor...'
+    };
+    const time = new Date().toLocaleTimeString('es-ES');
+    log.innerHTML += `<br>[${time}] ${msgs[action]}`;
+    log.scrollTop = log.scrollHeight;
+  }
+
+  // STATUS CHECK (simulated - para estado real necesitas backend)
+  setTimeout(() => {
+    const el = document.getElementById('server-status-val');
+    el.innerHTML = '<span class="status-dot dot-online"></span>Online';
+  }, 1500);
+</script>
+</body>
+</html>
